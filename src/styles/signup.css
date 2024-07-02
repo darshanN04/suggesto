@@ -27,6 +27,9 @@
   margin-left: 40px;
   color: white;
   margin-right: 10px;
+  font-family: 'Courier New', Courier, monospace;
+  letter-spacing: 0;
+  font-weight: 800;
 }
 .signup-sep{
   height: 20vh;
@@ -42,7 +45,6 @@
   height: 45px;
   width: 40%;
   margin: 10px;
-  border: none;
   border-radius: 10px;
   background-color: rgba(255, 255, 255, 0.925);
   font-size: 14px;
