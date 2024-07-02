@@ -6,7 +6,7 @@ const Signup = () => {
     <div className='body'>
         <div className='signup-box'>
             <div className='leftcol'>
-                <label className='signup-label'>Sign up</label>
+                <label className='signup-label'>Sign Up</label>
                 <hr className='signup-sep'></hr>
             </div>
             <div className='midcol'>
