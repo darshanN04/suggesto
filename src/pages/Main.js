@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import '../styles/main.css';
-import { FcLike } from "react-icons/fc";
 
 const Main = () => {
   const [comment, setComment] = useState('');
