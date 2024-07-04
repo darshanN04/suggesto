@@ -1,13 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import '../styles/main.css';
+import { FcLike } from "react-icons/fc";
 
 const Main = () => {
   const [comment, setComment] = useState('');
   const [messages, setMessages] = useState([]);
   const [lastMessage, setLastMessage] = useState('');
-
+  const [like, setLike] = useState(156);
+  var [isLike, setIsLike] = useState(false);
  
-
+  const likeButton = () => {
+    setLike (like + (isLike ? -1 : 1));
+    setIsLike(!isLike);
+  };
   const handleSend = () => {
     if (comment.trim()) {
       setMessages([...messages, comment]);
@@ -39,7 +44,16 @@ const Main = () => {
       <div className='mid'>
         {messages.map((message, index) => (
           <div key={index} className='message_card'>
-            {message}
+            <div className='upper_part'>{message}</div>
+            <div className='lower_part'>
+              <p className={'' + (isLike? "try": "try1")}>
+                
+                <i class="fa fa-thumbs-up" style={{fontSize: "20px"}} onClick={likeButton}></i>
+                <br />
+                
+              </p>
+              <p className='like_label'>{like}</p>
+            </div>
           </div>
         ))}
       </div>

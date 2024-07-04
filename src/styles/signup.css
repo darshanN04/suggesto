@@ -12,6 +12,9 @@
   box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.6);
   overflow: hidden;
   overflow-y: scroll;
+  scrollbar-width: thin;
+  scroll-behavior: smooth;
+  scrollbar-color: transparent transparent;
 }
 
 .leftcol{
@@ -40,6 +43,7 @@
   background-color: white;
 }
 .midcol{
+  position: relative;
   width: 55%;
   padding-right: 0;
 }
@@ -56,9 +60,7 @@
 .line1, .line2{
   margin-bottom: 10px;
 }
-.mid-row2{
-  
-}
+
 .signup-btn{
   width: 160px;
   height: 50px;
@@ -66,6 +68,11 @@
   margin-left: 33%;
   margin-top: 5%;
   font-weight: 600;
+  background-color: rgba(2, 160, 208, 0.842);
+  color: white;
+  border: none;
+  font-size: 1.2rem;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
 .signup-btn:hover{
   cursor: pointer;
@@ -159,5 +166,14 @@
 }
   .img{
     display: none;
+  }
+}
+@media (max-height: 500px){
+  .signup-box{
+    padding-top: 10%;
+  }
+  .midcol{
+    margin-top: 5%;
+    margin-bottom: 5%;
   }
 }

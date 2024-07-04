@@ -1,7 +1,9 @@
 import React from 'react'
 import img from '../assets/img.png'
 import '../styles/signup.css'
+import { useNavigate } from 'react-router-dom'
 const Signup = () => {
+const navigate = useNavigate()
   return (
     <div className='body'>
         <div className='signup-box'>
@@ -12,7 +14,7 @@ const Signup = () => {
             <div className='midcol'>
                 <div className='mid-row1'>
                     <div className='line1'>
-                        <input type='text' placeholder='username' className='username-in'></input>
+                        <input type='text' placeholder='username' className='username-in' required></input>
                         <input type='tel' placeholder='phone number' className='phone-in'></input>
                     </div>
                     <div className='line2'>
@@ -25,7 +27,7 @@ const Signup = () => {
                     </div>
                 </div>
                 <div className='mid-row2'>
-                    <button className='signup-btn'>Submit</button>
+                    <button className='signup-btn' onClick={()=>navigate('/main')}>Submit</button>
                 </div>
             </div>
             <div className='rightcol'>

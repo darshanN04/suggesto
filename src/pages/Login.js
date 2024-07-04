@@ -1,6 +1,8 @@
 import React from 'react'
 import '../styles/login.css'
+import { useNavigate } from 'react-router-dom'
 const Login = () => {
+  const navigate = useNavigate()
   return (
     <div className='body'>
        <div className="login_box">
@@ -14,8 +16,8 @@ const Login = () => {
                 <label className='forgot_password'>forgot password?</label>
             </div>
             <div className='buttons'>
-                <button className='submit_button'>Submit</button>
-                <button className='cancel_button'>Cancel</button>
+                <button className='submit_button' onClick={()=>navigate('/main')}>Submit</button>
+                <button className='cancel_button' onClick={()=>navigate(-1)}>Cancel</button>
             </div>
        </div>
 
