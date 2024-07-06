@@ -70,7 +70,7 @@
     display: flex;
     width: 90%;
     margin-left: 10%;
-    height: 60%;
+    height: 65%;
     margin-top: 0px;
     overflow: hidden;
     display: flex;
@@ -100,6 +100,7 @@
     box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
     overflow-y: auto;
     scrollbar-color: transparent transparent;
+    font-weight: 800;
   }
 .upper_part{
     height: 70%;
@@ -123,12 +124,25 @@
 .liked, .disliked{
     cursor: pointer;
 }
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+      transform: translateY(0px);
+    }
+    40% {
+      transform: translateY(-10px);
+    }
+    60% {
+      transform: translateY(-5px);
+    }
+  }
+  
 .liked{
     padding: 4% 0 0 1%;
     display: flex;
     color: rgb(243, 19, 82);
     border: none;
     font-size: 1rem;
+    animation: bounce 1s;
 }
 
 .disliked{

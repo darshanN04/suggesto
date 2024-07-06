@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import '../styles/main.css';
-
 const Main = () => {
   const [comment, setComment] = useState('');
   const [messages, setMessages] = useState([]);
-  const x= 1400;
+  const x= 1200;
   const handleSend = () => {
   if (comment.trim()) {
       setMessages([...messages, { text: comment, like: x, isLiked: false , isDisLiked: false}]);
@@ -12,16 +11,16 @@ const Main = () => {
     }
   };
 
-  const togglebutton1 = (index) => {
-    setMessages(messages.map((message, i) => 
-      i === index ? { 
-        ...message, 
-        like: message.isLiked ? message.like - 1 : (message.isDisLiked ? message.like + 2 : message.like + 1), 
+  const togglebutton1 = (index) =>{
+    setMessages(messages.map((message, i) =>
+      i === index ? {
+        ...message,
+        like: message.isLiked ? message.like - 1 : (message.isDisLiked ? message.like + 2 : message.like + 1),
         isLiked: !message.isLiked,
         isDisLiked: message.isLiked ? message.isDisLiked : false
       } : message
     ));
-  };
+  }
   
   const togglebutton2 = (index) => {
     setMessages(messages.map((message, i) => 
@@ -59,7 +58,6 @@ const Main = () => {
           <div key={index} className='message_card'>
             <div className='upper_part'>{message.text}</div>
             <div className='lower_part'>
-
               <p className={(message.isLiked? "liked": "disliked")}>
                 <i class="fa fa-thumbs-up" style={{fontSize: "20px"}} onClick={()=>togglebutton1(index)}></i>
               </p>
@@ -67,7 +65,6 @@ const Main = () => {
               <p className={(message.isDisLiked? "liked": "disliked")}>
                 <i class="fa fa-thumbs-down" style={{fontSize: "20px"}} onClick={()=>togglebutton2(index)}></i>
               </p>
-
             </div>
           </div>
         ))}
