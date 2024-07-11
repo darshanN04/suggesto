@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import '../styles/main.css';
+
 const Main = () => {
   const [comment, setComment] = useState('');
   const [messages, setMessages] = useState([]);

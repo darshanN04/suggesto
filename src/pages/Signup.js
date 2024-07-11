@@ -1,15 +1,16 @@
-import React, { useState } from 'react'
-import img from '../assets/img.png'
-import '../styles/signup.css'
-import { useNavigate } from 'react-router-dom'
+import React, { useState } from 'react';
+import img from '../assets/img.png';
+import '../styles/signup.css';
+import { useNavigate } from 'react-router-dom';
+
 const Signup = () => {
-    const navigate = useNavigate()
-    const [username, setUsername] = useState('')
-    const [phone, setPhone] = useState('')
-    const [email, setEmail] = useState('')
-    const [age, setAge] = useState('')
-    const [password, setPassword] = useState('')
-    const [confirm, setConfirm] = useState('')
+    const navigate = useNavigate();
+    const [username, setUsername] = useState('');
+    const [phone, setPhone] = useState('');
+    const [email, setEmail] = useState('');
+    const [age, setAge] = useState('');
+    const [password, setPassword] = useState('');
+    const [confirm, setConfirm] = useState('');
 
     const validateForm = () => {
         if (!username || !phone || !email || !age || !password || !confirm) {
@@ -23,11 +24,37 @@ const Signup = () => {
     
         return true;
     };
-    const handleSignup = () => {
+
+    const handleSignup = async () => {
         if (validateForm()) {
-            localStorage.setItem('username', username);
-            localStorage.setItem('password', password);
-            navigate('/login'); 
+            try {
+                const response = await fetch('http://localhost:3000/signup', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        username,
+                        email,
+                        password,
+                        age,
+                        phone
+                    }),
+                });
+
+                if (response.status === 201) {
+                    localStorage.setItem('username', username);
+                    localStorage.setItem('password', password);
+                    navigate('/login');
+                } else if (response.status === 400) {
+                    alert('User already exists');
+                } else {
+                    alert('An error occurred. Please try again later.');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred. Please try again later.');
+            }
         }
     };
 
@@ -41,16 +68,16 @@ const Signup = () => {
                 <div className='midcol'>
                     <div className='mid-row1'>
                         <div className='line1'>
-                            <input type='text' placeholder='username' className='username-in' value={username} onChange={(e)=>setUsername(e.target.value)} required></input>
-                            <input type='tel' placeholder='phone number' className='phone-in' value={phone} onChange={(e)=>setPhone(e.target.value)}></input>
+                            <input type='text' placeholder='username' className='username-in' value={username} onChange={(e) => setUsername(e.target.value)} required></input>
+                            <input type='tel' placeholder='phone number' className='phone-in' value={phone} onChange={(e) => setPhone(e.target.value)}></input>
                         </div>
                         <div className='line2'>
-                            <input type='email' placeholder='email' className='email-in' value={email} onChange={(e)=>setEmail(e.target.value)}></input>
-                            <input type="number" placeholder='age' className='age-in' value={age} onChange={(e)=>setAge(e.target.value)}></input>
+                            <input type='email' placeholder='email' className='email-in' value={email} onChange={(e) => setEmail(e.target.value)}></input>
+                            <input type="number" placeholder='age' className='age-in' value={age} onChange={(e) => setAge(e.target.value)}></input>
                         </div>
                         <div className='line3'>
-                            <input type='password' placeholder='password' className='password-in' value={password} onChange={(e)=>setPassword(e.target.value)}></input>
-                            <input type='password' placeholder='confirm password' className='confirm-in' value={confirm} onChange={(e)=> setConfirm(e.target.value)}></input>
+                            <input type='password' placeholder='password' className='password-in' value={password} onChange={(e) => setPassword(e.target.value)}></input>
+                            <input type='password' placeholder='confirm password' className='confirm-in' value={confirm} onChange={(e) => setConfirm(e.target.value)}></input>
                         </div>
                     </div>
                     <div className='mid-row2'>
@@ -64,4 +91,5 @@ const Signup = () => {
         </div>
     )
 }
-export default Signup
+
+export default Signup;
