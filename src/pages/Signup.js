@@ -43,8 +43,6 @@ const Signup = () => {
                 });
 
                 if (response.status === 201) {
-                    localStorage.setItem('username', username);
-                    localStorage.setItem('password', password);
                     navigate('/login');
                 } else if (response.status === 400) {
                     alert('User already exists');
