@@ -44,9 +44,11 @@ app.post('/login', async (req, res) => {
             .input('user_name', sql.NVarChar(50), username)
             .input('password', sql.NVarChar(50), password)
             .execute('dbo.VERIFY_LOGIN');
-
+        
         if (result.recordset.length > 0) {
-            res.status(200).send('Login successful');
+            const hi_name = result.recordset[0].User_id;
+            console.log(hi_name);
+            res.status(200).json({ message: 'Login successful', user_id: hi_name });            
         } else {
             res.status(401).send('Invalid username or password');
         }
@@ -72,6 +74,64 @@ app.post('/getMessages', async (req, res) => {
         res.status(500).send('Server error');
     }
 });
+
+app.post('/addMessage', async (req, res) => {
+    const { user_id, place_id, types_id, msg_content } = req.body;
+
+    try {
+        let pool = await sql.connect(config);
+        let result = await pool.request()
+            .input('user_id', sql.Int, user_id)
+            .input('place_id', sql.Int, place_id)
+            .input('types_id', sql.Int, types_id)
+            .input('msg_content', sql.NVarChar(sql.MAX), msg_content)
+            .execute('dbo.add_msgs');
+
+        const msg_id = result.recordset[0].msg_id;
+        res.status(201).json({ msg_id });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Server error');
+    }
+});
+
+app.post('/likeMessage', async (req, res) => {
+    const { user_id, msg_id } = req.body;
+  
+    try {
+      let pool = await sql.connect(config);
+      let result = await pool.request()
+        .input('user_id', sql.Int, user_id)
+        .input('msg_id', sql.Int, msg_id)
+        .execute('dbo.my_like');
+  
+      const LIKE_ID = result.recordset[0].LIKE_ID;
+      const LIKE_COUNT = result.recordset[0].LIKE_COUNT;
+      res.status(200).json({ LIKE_ID, LIKE_COUNT });
+    } catch (err) {
+      console.error(err);
+      res.status(500).send('Server error');
+    }
+  });
+  
+app.post('/dislikeMessage', async(req1, res1) => {
+    const {user_id, msg_id} = req1.body;
+    try{
+        let pool = await sql.connect(config);
+        let result1 = await pool.request()
+            .input('user_id', sql.Int, user_id)
+            .input('msg_id', sql.Int, msg_id)
+            .execute('dbo.my_dislike');
+        const DISLIKE_ID = result1.recordset[0].DISLIKE_ID;
+        const DISLIKE_COUNT = result1.recordset[0].DISLIKE_COUNT;
+        res1.status(200).json({ DISLIKE_ID, DISLIKE_COUNT });
+    } catch (err) {
+        console.error(err);
+        res1.status(500).send('Server error');
+    }
+});
+  
+
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);

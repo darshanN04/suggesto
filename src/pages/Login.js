@@ -1,37 +1,43 @@
-import React, { useState } from 'react';
+import React, { useState, useContext }  from 'react';
 import '../styles/login.css';
 import { useNavigate } from 'react-router-dom';
+import { UserContext } from './UserContext';
+
 
 const Login = () => {
+  const { setUserId } = useContext(UserContext);
   const navigate = useNavigate();
   const [loginname, setLoginname] = useState('');
   const [loginpassword, setLoginpassword] = useState('');
 
   const checkCredentials = async () => {
     try {
-      const response = await fetch('http://localhost:5000/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          username: loginname,
-          password: loginpassword,
-        }),
-      });
+        const response = await fetch('http://localhost:5000/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                username: loginname,
+                password: loginpassword,
+            }),
+        });
 
-      if (response.status === 200) {
-        navigate('/main');
-      } else if (response.status === 401) {
-        alert('Invalid username or password');
-      } else {
-        alert('An error occurred. Please try again later.');
-      }
+        if (response.status === 200) {
+            const data = await response.json();
+            setUserId(data.user_id);  // Set the user_id in context
+            console.log(data.user_id);
+            navigate('/main');
+        } else if (response.status === 401) {
+            alert('Invalid username or password');
+        } else {
+            alert('An error occurred. Please try again later.');
+        }
     } catch (error) {
-      console.error('Error:', error);
-      alert('An error occurred. Please try again later.');
+        console.error('Error:', error);
+        alert('An error occurred. Please try again later.');
     }
-  };
+};
 
   return (
     <div className='body'>

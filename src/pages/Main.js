@@ -1,42 +1,43 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
+import { UserContext } from './UserContext';
 import '../styles/main.css';
 
 const Main = () => {
+  const { userId } = useContext(UserContext);  // Access user_id from context
   const [comment, setComment] = useState('');
   const [messages, setMessages] = useState([]);
   const [placeId, setPlaceId] = useState('');
   const [typeId, setTypeId] = useState('');
 
-  const handleSend = () => {
+  const handleSend = async () => {
     if (comment.trim()) {
-      setMessages([...messages, { text: comment, like: 1200, dislike: 200, isLiked: false, isDisLiked: false }]);
-      setComment('');
+      try {
+        const response = await fetch('http://localhost:5000/addMessage', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            user_id: userId, 
+            place_id: placeId,
+            types_id: typeId,
+            msg_content: comment,
+          }),
+        });
+  
+        if (response.ok) {
+          const data = await response.json();
+          setMessages([...messages, { msg_id: data.msg_id, msg_content: comment, likes_count: 0, dislikes_count: 0, isLiked: false, isDisLiked: false }]);
+          setComment('');
+        } else {
+          console.error('Failed to add message');
+        }
+      } catch (error) {
+        console.error('Error adding message:', error);
+      }
     }
   };
-
-  const togglebutton1 = (index) => {
-    setMessages(messages.map((message, i) =>
-      i === index ? {
-        ...message,
-        like: !message.isLiked ? message.like + 1 : message.like - 1,
-        dislike: message.isDisLiked ? message.dislike - 1 : message.dislike,
-        isLiked: !message.isLiked,
-        isDisLiked: message.isDisLiked && !message.isLiked ? false : message.isDisLiked
-      } : message
-    ));
-  };
-
-  const togglebutton2 = (index) => {
-    setMessages(messages.map((message, i) =>
-      i === index ? {
-        ...message,
-        dislike: !message.isDisLiked ? message.dislike + 1 : message.dislike - 1,
-        like: message.isLiked ? message.like - 1 : message.like,
-        isDisLiked: !message.isDisLiked,
-        isLiked: message.isLiked && !message.isDisLiked ? false : message.isLiked
-      } : message
-    ));
-  };
+  
 
   const handleSearch = async () => {
     try {
@@ -58,6 +59,59 @@ const Main = () => {
     }
   };
 
+  const handleLike = async (msg_id, userId) => {
+    try {
+      const response = await fetch('http://localhost:5000/likeMessage', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          user_id: userId,
+          msg_id: msg_id,
+        }),
+      });
+  
+      if (response.ok) {
+        
+        const data = await response.json();
+        setMessages(messages.map(message => 
+          message.msg_id === msg_id ? { ...message, likes_count: data.LIKE_COUNT, isLiked: data.LIKE_ID !== 0 } : message
+        ));
+      } else {
+        console.error('Failed to toggle like');
+      }
+    } catch (error) {
+      console.error('Error toggling like:', error);
+    }
+  };
+  
+  const handleDislike = async (msg_id, userId) => {
+    try {
+      const response1 = await fetch('http://localhost:5000/dislikeMessage', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          user_id: userId,
+          msg_id: msg_id,
+        }),
+      });
+  
+      if (response1.ok) {
+        const data1 = await response1.json();
+        setMessages(messages.map(message => 
+          message.msg_id === msg_id ? { ...message, dislikes_count: data1.DISLIKE_COUNT, disLiked: data1.DISLIKE_ID !== 0 } : message
+        ));
+      } else {
+        console.error('Failed to toggle like');
+      }
+    } catch (error) {
+      console.error('Error toggling like:', error);
+    }
+  };
+  
   return (
     <div className='main'>
       <div className='nav_bar'>
@@ -82,12 +136,12 @@ const Main = () => {
           <div key={index} className='message_card'>
             <div className='upper_part'>{message.msg_content}</div>
             <div className='lower_part'>
-              <p className={(message.isLiked ? "liked" : "disliked")}>
-                <i className="fa fa-thumbs-up" style={{ fontSize: "20px" }} onClick={() => togglebutton1(index)}></i>
+              <p className={message.isLiked ? "liked" : "disliked"} onClick={() => handleLike(message.msg_id, userId)}>
+                <i className="fa fa-thumbs-up" style={{ fontSize: "20px" }}></i>
               </p>
               <p className='like_label'>{message.likes_count}</p>
-              <p className={(message.isDisLiked ? "liked" : "disliked")}>
-                <i className="fa fa-thumbs-down" style={{ fontSize: "20px" }} onClick={() => togglebutton2(index)}></i>
+              <p className={message.disLiked ? "liked" : "disliked"}  onClick={() => handleDislike(message.msg_id, userId)}>
+                <i className="fa fa-thumbs-down" style={{ fontSize: "20px" }}></i>
               </p>
               <p className='like_label'>{message.dislikes_count}</p>
             </div>
@@ -95,19 +149,10 @@ const Main = () => {
         ))}
       </div>
 
+
+
       <div className='bottom_bar'>
-        <select className='nav_input1'>
-          <option>Food</option>
-          <option>Place</option>
-          <option>HomeStay</option>
-          <option>College</option>
-        </select>
-        <select className='nav_input1'>
-          <option>Manipal</option>
-          <option>Udupi</option>
-          <option>Parkala</option>
-        </select>
-        <textarea className='comment_box' value={comment}
+        <textarea className='comment_box' placeholder="Enter your comments" value={comment}
           onChange={(e) => setComment(e.target.value)}
           onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend(); } }}>
         </textarea>
