@@ -58,6 +58,28 @@ app.post('/login', async (req, res) => {
     }
 });
 
+app.get('/getTypes', async (req, res) => {
+    try {
+      await sql.connect(config);
+      const result = await sql.query`EXEC [dbo].[get_types]`;
+      res.json(result.recordset);
+    } catch (err) {
+      console.error(err);
+      res.status(500).send('Server Error');
+    }
+  });
+
+  app.get('/getPlaces', async (req, res) => {
+    try {
+      await sql.connect(config);
+      const result = await sql.query`EXEC [dbo].[get_places]`;
+      res.json(result.recordset);
+    } catch (err) {
+      console.error(err);
+      res.status(500).send('Server Error');
+    }
+  });
+
 app.post('/getMessages', async (req, res) => {
     const { place_id, types_id } = req.body;
 
@@ -97,14 +119,14 @@ app.post('/addMessage', async (req, res) => {
 
 app.post('/likeMessage', async (req, res) => {
     const { user_id, msg_id } = req.body;
-  
+
     try {
       let pool = await sql.connect(config);
       let result = await pool.request()
         .input('user_id', sql.Int, user_id)
         .input('msg_id', sql.Int, msg_id)
         .execute('dbo.my_like');
-  
+
       const LIKE_ID = result.recordset[0].LIKE_ID;
       const LIKE_COUNT = result.recordset[0].LIKE_COUNT;
       res.status(200).json({ LIKE_ID, LIKE_COUNT });
@@ -113,7 +135,7 @@ app.post('/likeMessage', async (req, res) => {
       res.status(500).send('Server error');
     }
   });
-  
+
 app.post('/dislikeMessage', async(req1, res1) => {
     const {user_id, msg_id} = req1.body;
     try{
@@ -130,6 +152,51 @@ app.post('/dislikeMessage', async(req1, res1) => {
         res1.status(500).send('Server error');
     }
 });
+  
+app.post('/update-password', async (req, res) => {
+    const { user_id, oldpassword, newpassword } = req.body;
+  
+    try {
+      let pool = await sql.connect(config);
+  
+      let result = await pool.request()
+        .input('user_id', sql.Int, user_id)
+        .input('oldpassword', sql.NVarChar(100), oldpassword)
+        .input('newpassword', sql.NVarChar(100), newpassword)
+        .execute('update_password');
+  
+      const updateResult = result.recordset[0].RESULT;
+  
+      if (updateResult === 1) {
+        res.status(200).send({ message: 'Password updated successfully' });
+      } else {
+        res.status(400).send({ message: 'Old password is incorrect' });
+      }
+    } catch (err) {
+      console.error(err);
+      res.status(500).send({ message: 'An error occurred' });
+    }
+  });
+  app.get('/getUserInfo', async (req, res) => {
+    const userId = req.query.userId;
+    try {
+      let pool = await sql.connect(config);
+      let result = await pool.request()
+        .input('userId', sql.Int, userId)
+        .query('SELECT * FROM user_table WHERE User_id = @userId');
+      let msg = await pool.request()
+        .input('userId', sql.Int, userId)
+        .query('SELECT COUNT(*) as total FROM msgs_table WHERE User_id = @userId');
+      const combinedResult = { ...result.recordset[0], total: msg.recordset[0].total };
+      res.json(combinedResult);
+      console.log(combinedResult);
+    } catch (err) {
+      console.error(err);
+      res.status(500).send({ message: 'Error fetching user info' });
+    }
+  });
+
+
   
 
 

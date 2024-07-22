@@ -1,14 +1,56 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { UserContext } from './UserContext';
 import '../styles/main.css';
+import { useNavigate } from 'react-router-dom';
 
 const Main = () => {
-  const { userId } = useContext(UserContext);  // Access user_id from context
+  const { userId } = useContext(UserContext);  
   const [comment, setComment] = useState('');
   const [messages, setMessages] = useState([]);
   const [placeId, setPlaceId] = useState('');
   const [typeId, setTypeId] = useState('');
+  const [types, setTypes] = useState([]);
+  const [places, setPlaces] = useState([]);
+  const navigate = useNavigate(); 
 
+
+
+  useEffect(() => {
+    const fetchTypes = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/getTypes');
+        const data = await response.json();
+        setTypes(data);
+      } catch (error) {
+        console.error('Error fetching types:', error);
+      }
+    };
+
+    const fetchPlaces = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/getPlaces');
+        const data = await response.json();
+        setPlaces(data);
+      } catch (error) {
+        console.error('Error fetching places:', error);
+      }
+    };
+
+    fetchPlaces();
+    fetchTypes();
+  }, []);
+
+  const handleChangePlace = (e) => {
+    setPlaceId(e.target.value);
+  };
+
+  const handleChangeType = (e) => {
+    setTypeId(e.target.value);
+  };
+
+  
+
+  
   const handleSend = async () => {
     if (comment.trim()) {
       try {
@@ -78,8 +120,9 @@ const Main = () => {
         setMessages(messages.map(message => 
           message.msg_id === msg_id ? { ...message, likes_count: data.LIKE_COUNT, isLiked: data.LIKE_ID !== 0 } : message
         ));
+        console.log(data.LIKE_COUNT);
       } else {
-        console.error('Failed to toggle like');
+        alert('Login to like');
       }
     } catch (error) {
       console.error('Error toggling like:', error);
@@ -104,31 +147,42 @@ const Main = () => {
         setMessages(messages.map(message => 
           message.msg_id === msg_id ? { ...message, dislikes_count: data1.DISLIKE_COUNT, disLiked: data1.DISLIKE_ID !== 0 } : message
         ));
+        console.log(data1);
       } else {
-        console.error('Failed to toggle like');
+        alert('Login to dislike');
       }
     } catch (error) {
       console.error('Error toggling like:', error);
     }
   };
-  
+  const handleProfile = () => {
+    navigate('/profile');
+  }
   return (
     <div className='main'>
+      
+
       <div className='nav_bar'>
-        <select className='nav_input1' onChange={(e) => setTypeId(e.target.value)}>
-          <option value="">Select Type</option>
-          <option value="1">Food</option>
-          <option value="2">Place</option>
-          <option value="3">HomeStay</option>
-          <option value="4">College</option>
-        </select>
-        <select className='nav_input2' onChange={(e) => setPlaceId(e.target.value)}>
-          <option value="">Select Place</option>
-          <option value="1">Manipal</option>
-          <option value="2">Udupi</option>
-          <option value="3">Parkala</option>
-        </select>
+      <select className='nav_input1' onChange={handleChangeType}>
+        <option value="" className='drop_down'>Select Type</option>
+        {types.map((type) => (
+          <option key={type.Types_id} value={type.Types_id} className='drop_down'>
+            {type.Types_name}
+          </option>
+        ))}
+      </select>
+      <select className='nav_input2' onChange={handleChangePlace}>
+        <option value="">Select Place</option>
+        {places.map((place) => (
+          <option key={place.place_id} value={place.place_id}>
+            {place.place_name}
+          </option>
+        ))}
+      </select>
         <button className='search_btn' onClick={handleSearch}>Search</button>
+          <button className='profile_button' onClick={handleProfile}>
+            Profile
+        </button>
       </div>
 
       <div className='mid'>
@@ -136,6 +190,9 @@ const Main = () => {
           <div key={index} className='message_card'>
             <div className='upper_part'>{message.msg_content}</div>
             <div className='lower_part'>
+            <p className='like_label'>
+                {(message.dislikes_count !== 0 && message.likes_count!==0) ? `${Math.round((message.likes_count / (message.dislikes_count + message.likes_count)) * 100)}%` : (message.likes_count===0? '0%': '100%')}
+              </p>
               <p className={message.isLiked ? "liked" : "disliked"} onClick={() => handleLike(message.msg_id, userId)}>
                 <i className="fa fa-thumbs-up" style={{ fontSize: "20px" }}></i>
               </p>

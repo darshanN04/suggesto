@@ -1,0 +1,111 @@
+.profile_page{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #01B897, #7E009A); 
+    flex-direction: column;
+       
+
+}
+.upper_profile{
+    margin-top: 5rem;
+    width: 85vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid white;
+    border-radius: 20px;
+    height: 40vh;
+    color: white;
+    position: relative;
+    overflow: hidden;
+
+}
+.profile_name,.profile_email, .profile_comments{
+    position: absolute;
+    display: flex; 
+    left: 10%;
+}
+.profile_name{
+    top: 10%;
+    font-size: 40px;
+
+}
+.profile_email{
+    left: 10.2%;
+    top: 35%;
+}
+.profile_comments{
+    top: 55%;
+}
+
+.col2{
+    display: flex;
+    left: 40%;
+    flex-direction: column;
+    gap: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-items: center;
+}
+.boxx{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.comments_count{
+    font-size: 26px;
+    font-weight: 600;
+    margin-bottom: 10%;
+
+}
+.counts{
+    font-size: 30px;
+}
+.col3{
+    position: absolute;
+    right: 10%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    display: flex;
+    align-items: center;
+}
+.row{
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 10%;
+}
+.row1, .row2, .row3{
+    height: 2rem;
+    width: 10rem;
+    border: 1px solid black;
+    border-radius: 20px;
+    padding-left: 30px;
+  
+}
+.update_button{
+    width: 5rem;
+    height: 2.2rem;
+    border: 1px solid black;
+    border-radius: 10px;
+    background-color: white;
+    color: black;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.lower_profile{
+    margin-top: 5rem;
+    width: 85vw;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    border: 2px solid white;
+    border-radius: 20px;
+    height: 40vh;
+    color: white;
+    position: relative;
+}
