@@ -120,7 +120,6 @@ const Main = () => {
         setMessages(messages.map(message => 
           message.msg_id === msg_id ? { ...message, likes_count: data.LIKE_COUNT, isLiked: data.LIKE_ID !== 0 } : message
         ));
-        console.log(data.LIKE_COUNT);
       } else {
         alert('Login to like');
       }
@@ -160,7 +159,6 @@ const Main = () => {
   }
   return (
     <div className='main'>
-      
 
       <div className='nav_bar'>
       <select className='nav_input1' onChange={handleChangeType}>

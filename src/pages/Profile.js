@@ -1,9 +1,8 @@
-import React, { useState, useContext, useEffect } from 'react'
-import '../styles/profile.css'
+import React, { useState, useContext, useEffect } from 'react';
+import '../styles/profile.css';
 import { UserContext } from '../pages/UserContext';
 
 const Profile = () => {
-
   const { userId } = useContext(UserContext);  // Access user_id from context
   const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
@@ -14,7 +13,7 @@ const Profile = () => {
     phone_no: '',
     total: 0,
   });
-
+  const [userMsgs, setUserMsgs] = useState([]);
 
   useEffect(() => {
     const fetchUserInfo = async () => {
@@ -31,7 +30,22 @@ const Profile = () => {
       }
     };
 
+    const fetchUserMsgs = async () => {
+      try {
+        const response1 = await fetch(`http://localhost:5000/getUserMsgs?userId=${userId}`);
+        if (response1.ok) {
+          const data = await response1.json();
+          setUserMsgs(data);
+        } else {
+          console.error('Failed to fetch user messages');
+        }
+      } catch (error) {
+        console.error('Error fetching user messages:', error);
+      }
+    };
+
     if (userId) {
+      fetchUserMsgs();
       fetchUserInfo();
     }
   }, [userId]);
@@ -41,70 +55,88 @@ const Profile = () => {
       alert('New password and confirm password do not match');
       return;
     }
-    try{
-    const response = await fetch('http://localhost:5000/update-password', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        user_id: userId, 
-        oldpassword: oldPassword,
-        newpassword: newPassword,
-      }),
-    });
-    
+    try {
+      const response = await fetch('http://localhost:5000/update-password', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          user_id: userId,
+          oldpassword: oldPassword,
+          newpassword: newPassword,
+        }),
+      });
 
-    const result = await response.json();
-    if (response.status === 200) {
-      alert(result.message);
-    } else {
-      alert(result.message);
-    }}
-    catch (error) {
+      const result = await response.json();
+      if (response.status === 200) {
+        alert(result.message);
+      } else {
+        alert(result.message);
+      }
+    } catch (error) {
       console.error('Error updating password:', error);
     }
   };
 
   return (
     <div className='profile_page'>
-        <div className='upper_profile'>
-            <div className='col1'>
-                <h1 className='profile_name'>{userInfo.user_name}</h1>
-                <p className='profile_email'>{userInfo.email}</p>
-                <p className='profile_comments'>{userInfo.phone_no}</p>
-            </div>
-            <div className='col2'>
-                <div className='boxx'>                
-                  <div className='comments_count'>No. of comments</div>
-                </div>
-                <p className='counts'>{userInfo.total}</p>
-            </div>
-            <div className='col3'>
-                <div className='row'>Update Password</div>
-                  <input className='row1' type='password'
-                    placeholder='Old password'
-                    value={oldPassword}
-                    onChange={(e) => setOldPassword(e.target.value)}>
-                  </input>
-                  <input className='row2' type='password'
-                    placeholder='New password'
-                    value={newPassword}
-                    onChange={(e) => setNewPassword(e.target.value)}>
-                  </input>
-                  <input className='row3' type='password'
-                    placeholder='Confirm password'
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}>
-                  </input>
-                <button className='update_button' onClick={handleUpdatePassword}>Update</button>
-            </div>
+      <div className='upper_profile'>
+        <div className='col1'>
+          <h1 className='profile_name'>{userInfo.user_name}</h1>
+          <p className='profile_email'>{userInfo.email}</p>
+          <p className='profile_comments'>{userInfo.phone_no}</p>
         </div>
-        <div className='lower_profile'>
-
+        <div className='col2'>
+          <div className='boxx'>
+            <div className='comments_count'>No. of comments</div>
+          </div>
+          <p className='counts'>{userInfo.total}</p>
         </div>
+        <div className='col3'>
+          <div className='row'>Update Password</div>
+          <input
+            className='row1'
+            type='password'
+            placeholder='Old password'
+            value={oldPassword}
+            onChange={(e) => setOldPassword(e.target.value)}
+          />
+          <input
+            className='row2'
+            type='password'
+            placeholder='New password'
+            value={newPassword}
+            onChange={(e) => setNewPassword(e.target.value)}
+          />
+          <input
+            className='row3'
+            type='password'
+            placeholder='Confirm password'
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+          />
+          <button className='update_button' onClick={handleUpdatePassword}>Update</button>
+        </div>
+      </div>
+      <div className='lower_profile'>
+        <div className='comments_title'>Comments</div>
+        <div className='msg_contents'>
+          {userMsgs.map((msg, index) => (
+            <div key={index} className='each_row'>
+              <div>{msg.Name}</div>
+              <div className='content_table'>{msg.content}</div>
+              <div>{msg.Types}</div>
+              <div>{msg.Place}</div>
+              <div>{msg.like_count}</div>
+              <div>{msg.dislike_count}</div>
+              <div>{msg.liked_percent}</div>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
-  )
-}
+  );
+};
 
-export default Profile
+export default Profile;

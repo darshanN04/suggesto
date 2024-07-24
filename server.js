@@ -177,7 +177,7 @@ app.post('/update-password', async (req, res) => {
       res.status(500).send({ message: 'An error occurred' });
     }
   });
-  app.get('/getUserInfo', async (req, res) => {
+app.get('/getUserInfo', async (req, res) => {
     const userId = req.query.userId;
     try {
       let pool = await sql.connect(config);
@@ -187,7 +187,10 @@ app.post('/update-password', async (req, res) => {
       let msg = await pool.request()
         .input('userId', sql.Int, userId)
         .query('SELECT COUNT(*) as total FROM msgs_table WHERE User_id = @userId');
-      const combinedResult = { ...result.recordset[0], total: msg.recordset[0].total };
+      let like = await pool.request()
+        .input('userId', sql.Int, userId)
+        .query('SELECT COUNT(*) as total FROM like_table WHERE User_id = @userId');
+      const combinedResult = { ...result.recordset[0], total: msg.recordset[0].total, likes: like.recordset[0].total };
       res.json(combinedResult);
       console.log(combinedResult);
     } catch (err) {
@@ -196,7 +199,22 @@ app.post('/update-password', async (req, res) => {
     }
   });
 
-
+  app.get('/getUserMsgs', async (req, res) => {
+    const userId = req.query.userId;
+    try {
+        let pool = await sql.connect(config);
+        let result = await pool.request()
+            .input('userId', sql.Int, userId)
+            .execute('user_msgs'); // Call the stored procedure
+        res.json(result.recordset);
+        console.log(result.recordset);
+    } catch (err) {
+        console.error(err);
+        res.status(500).send({ message: 'Error fetching user messages' });
+    }
+});
+  
+  
   
 
 

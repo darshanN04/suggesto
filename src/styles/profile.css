@@ -101,11 +101,42 @@
     margin-top: 5rem;
     width: 85vw;
     display: flex;
-    justify-content: space-evenly;
-    align-items: center;
+    flex-direction: column;
     border: 2px solid white;
     border-radius: 20px;
-    height: 40vh;
+    height: 80vh;
+    margin-bottom: 4rem;
     color: white;
     position: relative;
+    overflow-y: auto;
+    scrollbar-color: transparent transparent;
+    
+}
+.comments_title{
+    align-self: center;
+    font-size: 30px;
+    font-weight: 700;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+}
+.msg_contents{
+    display: flex;
+    font-size: 1.3rem;
+    flex-direction: column;
+    margin-left: 2rem;
+    justify-content: space-around;
+    align-items: center;
+}
+.each_row{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    gap: 5rem;
+}
+.content_table{
+    max-width: 20%;
+    overflow-y: hidden;
 }
