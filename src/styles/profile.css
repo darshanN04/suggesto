@@ -98,16 +98,16 @@
 }
 
 .lower_profile{
-    margin-top: 5rem;
     width: 85vw;
+    margin-top: 5rem;
+    margin-bottom: 4rem;
+    padding-bottom: 20px;
     display: flex;
     flex-direction: column;
     border: 2px solid white;
     border-radius: 20px;
     height: 80vh;
-    margin-bottom: 4rem;
     color: white;
-    position: relative;
     overflow-y: auto;
     scrollbar-color: transparent transparent;
     
@@ -117,26 +117,46 @@
     font-size: 30px;
     font-weight: 700;
     margin-top: 2rem;
-    margin-bottom: 2rem;
+    margin-bottom: 3rem;
 }
-.msg_contents{
-    display: flex;
-    font-size: 1.3rem;
-    flex-direction: column;
-    margin-left: 2rem;
-    justify-content: space-around;
-    align-items: center;
+thead {
+    position: sticky;
+    top: 0;
+    background-color: #333; /* Ensure the background color matches your design */
+    border-top: 2px solid #ffffff;
+    border-bottom: 2px solid #ffffff;
+    z-index: 1;
+    padding-left: 0;
 }
-.each_row{
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-    align-items: center;
-    margin-top: 1rem;
-    margin-bottom: 1rem;
-    gap: 5rem;
+
+tr {
+    font-size: 18px;
 }
-.content_table{
-    max-width: 20%;
-    overflow-y: hidden;
+
+
+table {
+    align-self: center;
+    width: 85vw;
+    border-collapse: collapse;
+    padding-left: 10px;
 }
+
+tbody {
+    overflow-y: auto;
+    border-top: 2px solid #f6f6f6;
+    scrollbar-color: transparent transparent;
+}
+
+th, td {
+    margin-right: 0;
+    padding-top: 10px;
+    text-align: center;
+    font-size: 18px;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 10px;
+    color: white;
+}
+td {
+    height: 2rem;
+}
+

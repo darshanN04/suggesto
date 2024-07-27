@@ -120,20 +120,31 @@ const Profile = () => {
         </div>
       </div>
       <div className='lower_profile'>
-        <div className='comments_title'>Comments</div>
-        <div className='msg_contents'>
-          {userMsgs.map((msg, index) => (
-            <div key={index} className='each_row'>
-              <div>{msg.Name}</div>
-              <div className='content_table'>{msg.content}</div>
-              <div>{msg.Types}</div>
-              <div>{msg.Place}</div>
-              <div>{msg.like_count}</div>
-              <div>{msg.dislike_count}</div>
-              <div>{msg.liked_percent}</div>
-            </div>
-          ))}
-        </div>
+        <div className='comments_title'><u>Comments</u></div>
+        <table>
+          <thead>
+            <tr>
+              <th>Place</th>
+              <th>Types</th>
+              <th>Content</th>
+              <th>Like Count</th>
+              <th>Dislike Count</th>
+              <th>Liked Percent</th>
+            </tr>
+          </thead>
+          <tbody>
+            {userMsgs.map((msg, index) => (
+              <tr key={index}>
+                <td className='place_table'>{msg.Place}</td>
+                <td>{msg.Types}</td>
+                <td>{msg.content}</td>
+                <td>{msg.like_count}</td>
+                <td>{msg.dislike_count}</td>
+                <td>{msg.liked_percent}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     </div>
   );
