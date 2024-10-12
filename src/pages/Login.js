@@ -17,7 +17,7 @@ const Login = () => {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({
+            body: JSON.stringify({ 
                 username: loginname,
                 password: loginpassword,
             }),
@@ -52,7 +52,7 @@ const Login = () => {
           <label className='forgot_password'>forgot password?</label>
         </div>
         <div className='buttons'>
-          <button className='submit_button' onClick={checkCredentials}>Submit</button>
+          <button className='submit_button' onClick={checkCredentials} >Submit</button>
           <button className='cancel_button' onClick={() => navigate(-1)}>Cancel</button>
         </div>
       </div>

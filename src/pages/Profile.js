@@ -81,6 +81,7 @@ const Profile = () => {
 
   return (
     <div className='profile_page'>
+      <div style={{fontSize: 30, fontWeight: "bold", color: "white", marginTop: 40, textDecoration: "underline"}}>PROFILE PAGE</div>
       <div className='upper_profile'>
         <div className='col1'>
           <h1 className='profile_name'>{userInfo.user_name}</h1>
@@ -122,7 +123,7 @@ const Profile = () => {
       <div className='lower_profile'>
         <div className='comments_title'><u>Comments</u></div>
         <table>
-          <thead>
+          <thead className='table_container'>
             <tr>
               <th>Place</th>
               <th>Types</th>

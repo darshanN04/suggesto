@@ -110,7 +110,6 @@
     color: white;
     overflow-y: auto;
     scrollbar-color: transparent transparent;
-    
 }
 .comments_title{
     align-self: center;
@@ -118,15 +117,16 @@
     font-weight: 700;
     margin-top: 2rem;
     margin-bottom: 3rem;
+    position: sticky;
 }
 thead {
     position: sticky;
     top: 0;
-    background-color: #333; /* Ensure the background color matches your design */
+    background-color: #333;
     border-top: 2px solid #ffffff;
     border-bottom: 2px solid #ffffff;
     z-index: 1;
-    padding-left: 0;
+    padding-right: 0;
 }
 
 tr {
@@ -136,7 +136,7 @@ tr {
 
 table {
     align-self: center;
-    width: 85vw;
+    width: 80vw;
     border-collapse: collapse;
     padding-left: 10px;
 }
@@ -145,6 +145,8 @@ tbody {
     overflow-y: auto;
     border-top: 2px solid #f6f6f6;
     scrollbar-color: transparent transparent;
+    max-height: 70%;
+
 }
 
 th, td {
@@ -158,5 +160,9 @@ th, td {
 }
 td {
     height: 2rem;
+}
+tbody tr:hover{
+    background-color: #dadada2d;
+    cursor: pointer;
 }
 
